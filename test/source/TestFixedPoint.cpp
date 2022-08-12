@@ -89,6 +89,21 @@ int TestFixedPoint()
 		if(!CompareValues(c.AsDouble(), 3.0))
 			nErrorCount++;
 
+		#if EA_COMPILER_CPP11_ENABLED
+		if((int)a != 1)
+			nErrorCount++;
+		if((unsigned int)c != 3)
+			nErrorCount++;
+		if((long)a != 1)
+			nErrorCount++;
+		if((unsigned long)c != 3)
+			nErrorCount++;
+		if(!CompareValues((double)(float)a, 1.0))
+			nErrorCount++;
+		if(!CompareValues((double)c, 3.0))
+			nErrorCount++;
+		#endif
+
 		a = b * f;
 		if(!CompareValues(a, 9.0))
 			nErrorCount++;

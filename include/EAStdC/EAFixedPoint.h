@@ -161,15 +161,17 @@ struct FPTemplate
 	void FromFixed(const int&       newValue) { value = newValue; }    // Accepts an int that is in fixed point format (i.e. shifted) already. 
 	T    AsFixed  ()                          { return value;     }    // Allows you to get the fixed point value itself and mess with it as you want. 
 
-	// We don't define the conversion operators because that would cause a lot of compiler
-	// errors complaining about not knowing what function to call. Thus, we have functions
-	// below such as "AsInt()" to do explicit conversions. 
-	// operator int()           const { return (int)          (value>>upShiftInt);          }
-	// operator unsigned int()  const { return (unsigned int) (value>>upShiftInt);          }
-	// operator long()          const { return (long)         (value>>upShiftInt);          }
-	// operator unsigned long() const { return (unsigned long)(value>>upShiftInt);          }
-	// operator float()         const { return (float)        (value /(float)upMulInt);     }
-	// operator double()        const { return (double)       (value /(double)upMulInt);    }
+	// We only define the conversion operators as explicit because otherwise they would
+	// cause a lot of compiler errors complaining about not knowing what function to call.
+	// We additionally define functions below such as "AsInt()" to do explicit conversions.
+	#if EA_COMPILER_CPP11_ENABLED
+	explicit operator int()           const { return (int)          (value>>upShiftInt);          }
+	explicit operator unsigned int()  const { return (unsigned int) (value>>upShiftInt);          }
+	explicit operator long()          const { return (long)         (value>>upShiftInt);          }
+	explicit operator unsigned long() const { return (unsigned long)(value>>upShiftInt);          }
+	explicit operator float()         const { return (float)        (value /(float)upMulInt);     }
+	explicit operator double()        const { return (double)       (value /(double)upMulInt);    }
+	#endif
 
 	int           AsInt()         const { return (int)          (value>>upShiftInt);       }
 	unsigned int  AsUnsignedInt() const { return (unsigned int) (value>>upShiftInt);       }
